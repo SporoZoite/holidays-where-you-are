@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=0.86, maximum-scale=5.0, minimum-scale=0.86">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js" integrity="sha512-N4kV7GkNv7QR7RX9YF/olywyIgIwNvfEe2nZtfyj73HdjCUkAfOBDbcuJ/cTaN04JKRnw1YG1wnUyNKMsNgg3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <title>Holidays Where You Are</title>
+    </head>
+    <body>
+        <script>
+            if ("geolocation" in navigator) {
+               console.log('geolocation available');
+               navigator.geolocation.getCurrentPosition(async position => {
+               let latitude, longitude, date, year, timestamp;
+               try {
+                   latitude = position.coords.latitude;
+                   document.getElementById('latitude').textContent = latitude;
+              
+                   longitude = position.coords.longitude;
+                   document.getElementById('longitude').textContent = longitude;
+          
+                   date = new Date(position.timestamp);
+                   year = date.getFullYear();
+                   document.getElementById('date').textContent = year;
+
+                   timestamp = position.timestamp;
+
+                   
+                   const countries = await fetch(`http://api.geonames.org/countryCodeJSON?lat=${latitude}&lng=${longitude}&username=SporoZoite`).then(response => response.json());
+                   const countryName = countries.countryName;
+                   document.getElementById('country').textContent = countryName;
+                   console.log(countries);
+                   
+                   const countryCode = countries.countryCode;
+
+                   const getHolidays = await fetch(`https://calendarific.com/api/v2/holidays?&api_key=3772c2112fe2e520c9d66c6d89b5460efc427ef1&country=${countryCode}&year=${year}`).then(response => response.json());
+                   const holidays = getHolidays.response.holidays;
+                   holidays.forEach((holiday) => { 
+                    const holidaySolo = document.createElement("div");
+                    holidaySolo.setAttribute("id", "holidaySolo");
+
+                        const date = document.createElement("div");
+                        date.setAttribute("id", "date");
+                        date.textContent = holiday.date.iso;
+
+
+                        const name = document.createElement("div");
+                        name.setAttribute("class", "name");
+                        name.textContent = holiday.name;
+
+                        const description = document.createElement("p");
+                        description.setAttribute("id", "description");
+                        description.textContent = `${holiday.description}`;
+
+                        document.getElementById('holidays').appendChild(holidaySolo);
+                        holidaySolo.appendChild(date);
+                        holidaySolo.appendChild(name);
+                        holidaySolo.appendChild(description);
+                                            
+                   });
+
+                   console.log(getHolidays.response.holidays);
+                   console.log(getHolidays);
+                   
+            }catch (error) {
+                console.error(error);
+            }
+                
+                const data = { latitude, longitude, timestamp };
+                   const options = {
+                   method: 'POST',
+                   headers: {
+                    'Content-Type': 'application/json'   
+                   },
+                   body: JSON.stringify(data)
+                   };
+                   const db_response = await fetch ('/api', options);
+                   const db_json  = await db_response.json();
+                   console.log(db_json);
+            });
+        } else {
+                console.log('geolocation not available');
+            }
+
+
+
+        </script>
+        <h1>Holidays Where You Are </h1>
+        <div><a href="/">Home</a>  |  <a href="all.html">Saved locations</a></div>
+        <p>Latitude: <span id="latitude" ></span>&deg;</br>
+            Longitude: <span id="longitude" ></span>&deg;</br>
+            Current Year: <span id="date" ></span></br>
+            Where You Are: <span id="country" ></span><br>
+            Holidays Here: <span id="holidays"></span><br>
+        </p>
+        
+        
+    </body>
+</html>

@@ -1,0 +1,38 @@
+{
+  "name": "merries-cli",
+  "version": "1.0.0",
+  "description": "worldwilde hollidays ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SporoZoite/merries-CLI.git"
+  },
+  "keywords": [
+    "npm",
+    "npm-hollidays"
+  ],
+  "author": "SporoZoite",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SporoZoite/merries-CLI/issues"
+  },
+  "homepage": "https://github.com/SporoZoite/merries-CLI#readme",
+  "dependencies": {
+    "axios": "^0.22.0",
+    "cors": "^2.8.5",
+    "country-list": "^2.2.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "nedb": "^1.8.0",
+    "node-fetch": "^3.0.0",
+    "nodemon": "^2.0.13",
+    "ora": "^6.0.1",
+    "save": "^2.4.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.12"
+  }
+}
